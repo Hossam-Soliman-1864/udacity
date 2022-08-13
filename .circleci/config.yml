@@ -1,11 +1,6 @@
 version: 2.1
 orbs:
   slack: circleci/slack@4.1
-workflows:
-  send-notification:
-    jobs:
-      - notify:
-          context: slack-secrets
 jobs:
   notify:
     docker:
