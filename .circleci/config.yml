@@ -5,7 +5,8 @@ jobs:
       - image: circleci/node:13.8.0
     steps:
       - checkout
-     
+      - restore_cache:
+          keys: [frontend-build]
       - run:
           name: Build front-end
           command: |
@@ -14,7 +15,6 @@ jobs:
             npm run build
             npm fund
             npm audit fix
-            exit 1
       - save_cache:
           paths: [frontend/node_modules]
           key: frontend-build
