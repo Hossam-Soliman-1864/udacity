@@ -3,7 +3,7 @@ orbs:
   slack: circleci/slack@4.1
 
 commands:
-  destroy-frontend:
+  destroy_frontend:
     description: Destroy front-end cloudformation stacks given a workflow ID.  
     steps:
       - run:
@@ -13,7 +13,7 @@ commands:
             aws cloudformation delete-stack --stack-name udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}
          
 
-  destroy-backend:
+  destroy_backend:
     description: Destroy back-end cloudformation stacks given a workflow ID.  
     steps:
       - run:
