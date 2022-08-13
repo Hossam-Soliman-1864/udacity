@@ -133,4 +133,4 @@ workflows:
       - scan-frontend:
           requires: [build-frontend]  
       - notify:
-          context: slack-secrets    
+          context: finalcicd 
