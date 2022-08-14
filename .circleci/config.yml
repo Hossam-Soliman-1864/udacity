@@ -31,7 +31,7 @@ commands:
           name: Revert migrations
           when: on_success
           command: |
-            if(( $SUCCESS==1 )); 
+            if(( $resave==1 )); 
             then
               cd ~/project/backend
               npm install
