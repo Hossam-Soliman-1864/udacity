@@ -222,7 +222,6 @@ jobs:
 
   deploy-frontend:
     docker:
-      docker:
       - image: amazon/aws-cli
     steps:
       -checkout
