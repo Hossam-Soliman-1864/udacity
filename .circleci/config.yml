@@ -226,11 +226,12 @@ jobs:
       - image: amazon/aws-cli
     steps:
       -checkout
+      - run: yum install -y tar gzip
       - run:
           name: Install dependencies
           command: |
-            yum install -y tar gzip
-            
+           
+
 
       - run:
           name: Get backend url
