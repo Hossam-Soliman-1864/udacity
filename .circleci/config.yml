@@ -185,6 +185,8 @@ jobs:
       - add_ssh_keys:
           fingerprints: ["9a:53:53:e9:ae:19:e2:7d:60:26:99:4b:4a:ee:5b:ba"]
       # attach workspace
+      - attach_workspace:
+          at: ~/
       - run:
           name: Install dependencies
           command: |
@@ -247,7 +249,8 @@ jobs:
             cat frontend/.env
 
       - restore_cache:
-          keys: [backend-build]      
+          keys: [backend-build] 
+      - run: yum install -y tar gzip         
       - run:
           name: Deploy frontend objects
           command: |
