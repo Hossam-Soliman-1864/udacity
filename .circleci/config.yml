@@ -21,15 +21,15 @@ commands:
           when: on_fail
           command: |
             aws cloudformation delete-stack --stack-name udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}
-            
-   revert-migrations:
+
+  revert-migrations:
     description: Revert the last migration if successfully run in the current workflow.
     parameters:
       # Add parameter here     
     steps:
       - run:
           name: Revert migrations
-          # Add when this will run
+          when: on_fail
           command: |
             # Curl command here to see if there was a successful migration associated with the workflow id, store result in SUCCESS variable
             SUCCESS = 1
@@ -39,7 +39,8 @@ commands:
             #  npm install
             #  Add revert code here. You can find this in the Getting Starte section.
               exit 1
-            fi          
+            fi  
+
 jobs:
   notify:
     docker:
@@ -278,6 +279,10 @@ jobs:
             tar -czvf artifact-"${CIRCLE_WORKFLOW_ID:0:7}".tar.gz dist
             aws s3 cp dist s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
 
+      - destroy_frontend
+      - revert-migrations
+      
+
       # Here's where you will add some code to rollback on failure      
                
   deploy-backend:
@@ -309,6 +314,10 @@ jobs:
             echo "Contents  of the inventory.txt file is -------"
             cat inventory.txt
             ansible-playbook -i inventory.txt deploy-backend.yml
+
+      - destroy_frontend
+      - revert-migrations
+
       # Here's where you will add some code to rollback on failure  
 
 
