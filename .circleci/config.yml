@@ -24,20 +24,21 @@ commands:
 
   revert-migrations:
     description: Revert the last migration if successfully run in the current workflow.
-    resave :
+    Success :
         type: string 
     steps:
       - run:
           name: Revert migrations
-          when: on_success
+          when: fail
+          curl  --insecure https://kvdb.io/SbTo2xguyH4cBNU1xs4fYD/migration_${CIRCLE_WORKFLOW_ID:0:7}
           command: |
-            if(( $resave==1 )); 
+            if(( $Success==1 )); 
             then
               cd ~/project/backend
               npm install
-            #  Add revert code here. You can find this in the Getting Starte section.
+              npm run migrations > migrations_dump.txt
               curl migrations_dump.txt  -d resave
-
+              npm run migrations > migrations_dump.txt
             fi  
 
 jobs:
@@ -268,7 +269,7 @@ jobs:
             cat frontend/.env
 
       - restore_cache:
-          keys: [backend-build] 
+          keys: [front-build] 
       - run:
           name: Deploy frontend objects
           command: |
@@ -278,8 +279,7 @@ jobs:
             npm run build
             tar -czvf artifact-"${CIRCLE_WORKFLOW_ID:0:7}".tar.gz dist
             aws s3 cp dist s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
-      - revert-migrations:
-            resave: migration_${CIRCLE_WORKFLOW_ID:0:7}
+      - revert-migrations
       - destroy_frontend
       
 
@@ -309,16 +309,54 @@ jobs:
             cd ..
             # Zip the directory
             tar -C backend -czvf artifact.tar.gz .
+            mkdir -p ~/project/.circleci/ansible/roles/deploy/files/
+            mv artifact.tar.gz .circleci/ansible/roles/deploy/files/artifact.tar.gz
             cd .circleci/ansible
-            echo "Contents  of the inventory.txt file is -------"
+            echo "Contents  of the inventory.txt file is -------$(tail -1 inventory.txt)"
             cat inventory.txt
             ansible-playbook -i inventory.txt deploy-backend.yml
-      - revert-migrations:
-            resave: migration_${CIRCLE_WORKFLOW_ID:0:7}
+      - revert-migrations
       - destroy_backend
       
 
+      # Here's where you will add some code to rollback on failure 
+  smoke-test:
+    docker:
+      - image: alpine:latest
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          command: |
+            # your code here
+      - run:
+          name: Get backend url
+          command: |
+            export API_URL="http://${BACKEND_IP}:3030"
+            echo "${API_URL}"
+      - run:
+          name: Backend smoke test.
+          command: |
+            if curl "${API_URL}/api/status" | grep "ok"
+            then
+                return 0
+            else
+                return 1
+            fi
+      - run:
+          name: Frontend smoke test.
+          command: |
+            URL="http://udapeople-${CIRCLE_WORKFLOW_ID:0:7}.s3-website-us-east-1.amazonaws.com/#/employees"            
+            echo ${URL} 
+            if curl -s ${URL} | grep "Welcome"
+            then
+                # Change this to 0 after the job fails
+              return 1
+            else
+              return 1
+            fi
       # Here's where you will add some code to rollback on failure  
+     
 
 
 workflows:
@@ -348,4 +386,6 @@ workflows:
       - deploy-frontend:
           requires: [run-migrations]   
       - deploy-backend:
-          requires: [run-migrations]     
+          requires: [run-migrations]   
+      - smoke-test:
+          requires: [deploy-backend, deploy-frontend]      
