@@ -250,6 +250,8 @@ jobs:
       - checkout
       - attach_workspace:
           at: ~/
+      - restore_cache:
+          keys: [front-build]     
       - run:
           name: Install dependencies
           command: |
@@ -268,8 +270,7 @@ jobs:
             echo API_URL="http://${BACKEND_IP}:3030" >> frontend/.env
             cat frontend/.env
 
-      - restore_cache:
-          keys: [front-build] 
+      
       - run:
           name: Deploy frontend objects
           command: |
