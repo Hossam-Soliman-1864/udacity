@@ -24,8 +24,8 @@ commands:
 
   revert-migrations:
     description: Revert the last migration if successfully run in the current workflow.
-    parameters:
-      resave : 'migration_${CIRCLE_WORKFLOW_ID:0:7}'    
+    resave :
+        type: string 
     steps:
       - run:
           name: Revert migrations
@@ -278,7 +278,8 @@ jobs:
             npm run build
             tar -czvf artifact-"${CIRCLE_WORKFLOW_ID:0:7}".tar.gz dist
             aws s3 cp dist s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
-      - revert-migrations
+      - revert-migrations:
+            resave: migration_${CIRCLE_WORKFLOW_ID:0:7}
       - destroy_frontend
       
 
@@ -312,7 +313,8 @@ jobs:
             echo "Contents  of the inventory.txt file is -------"
             cat inventory.txt
             ansible-playbook -i inventory.txt deploy-backend.yml
-      - revert-migrations
+      - revert-migrations:
+            resave: migration_${CIRCLE_WORKFLOW_ID:0:7}
       - destroy_backend
       
 
