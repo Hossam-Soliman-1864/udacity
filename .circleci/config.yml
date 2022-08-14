@@ -25,7 +25,7 @@ commands:
   revert-migrations:
     description: Revert the last migration if successfully run in the current workflow.
     parameters:
-      resave : migration_${CIRCLE_WORKFLOW_ID:0:7}    
+      resave : 'migration_${CIRCLE_WORKFLOW_ID:0:7}'    
     steps:
       - run:
           name: Revert migrations
