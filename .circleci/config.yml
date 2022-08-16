@@ -164,7 +164,7 @@ jobs:
       - image: amazon/aws-cli
     steps:
       - checkout
-      - run: yum install -y tar gzip
+#      - run: yum install -y tar gzip
       - run:
           name: Ensure back-end infrastructure exists
           command: |
@@ -256,8 +256,8 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            sudo yum install -y tar gzip
-            sudo apk add --update nodejs npm
+            yum install -y tar gzip
+            yum add --update nodejs npm
       - attach_workspace:
           at: ~/
 
@@ -275,7 +275,6 @@ jobs:
           name: Deploy frontend objects
           command: |
             cd frontend
-            sudo yum install -y tar
             npm install
             npm run build
             tar -czvf artifact-"${CIRCLE_WORKFLOW_ID:0:7}".tar.gz dist
