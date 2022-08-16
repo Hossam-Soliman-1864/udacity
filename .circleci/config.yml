@@ -257,7 +257,7 @@ jobs:
           name: Install dependencies
           command: |
             yum install -y tar gzip
-            yum add  update nodejs npm
+            yum install nodejs npm
       - attach_workspace:
           at: ~/
 
@@ -301,6 +301,9 @@ jobs:
           command: |
             apk add --update ansible
             apk add --update nodejs npm
+            apk add --update curl
+            apk add --update awscli
+
 
       - run:
           name: Deploy backend
