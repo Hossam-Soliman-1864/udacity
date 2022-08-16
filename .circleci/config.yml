@@ -4,8 +4,21 @@ orbs:
 
 commands:
  
+  destroy-environment1:
+    description: Destroy backend  cloudformation stacks given a workflow ID.
+    parameters:
+      workflow_id:
+        type: string      
+    steps:
+      - run:
+          name: Destroy environments
+          when: on_fail
+          command: |
+            echo "Destroying environment: << parameters.workflow_id >> "  
+            
+            aws cloudformation delete-stack --stack-name "udapeople-backend-<< parameters.workflow_id >>" 
   destroy-environment:
-    description: Destroy backend and frontend cloudformation stacks given a workflow ID.
+    description: Destroy frontend cloudformation stacks given a workflow ID.
     parameters:
       workflow_id:
         type: string      
@@ -19,8 +32,7 @@ commands:
         
             aws cloudformation delete-stack --stack-name "udapeople-frontend-<< parameters.workflow_id >>"
             
-            aws cloudformation delete-stack --stack-name "udapeople-backend-<< parameters.workflow_id >>" 
-
+      
 
   revert-migrations:
     description: Revert the last migration
@@ -258,7 +270,8 @@ jobs:
           name: Install dependencies
           command: |
             yum install -y tar gzip
-            yum install nodejs npm --enablerepo=epel
+            curl -sL https://rpm.nodesource.com/setup_10.x |  bash -
+            yum install -y nodejs npm 
 
       - attach_workspace:
           at: ~/
@@ -304,7 +317,6 @@ jobs:
             apk add --update ansible
             apk add --update nodejs npm
             apk add --update curl
-            apk add --update awscli
             apk add --update tar  gzip
             
 
@@ -325,7 +337,7 @@ jobs:
             cat inventory.txt
             ansible-playbook -i inventory.txt deploy-backend.yml
       
-      - destroy-environment:
+      - destroy-environment1:
           workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"
       - revert-migrations:
           workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"    
