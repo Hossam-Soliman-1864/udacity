@@ -320,7 +320,11 @@ jobs:
             apk add --update nodejs npm
             apk add --update curl
             apk add --update tar  gzip
-            apk add --update aws-cli
+            apk add python curl
+            curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip"
+            unzip awscli-bundle.zip
+            ./awscli-bundle/install -i /usr/local/aws -b /usr/local/bin/aws
+
       - run:
           name: Deploy backend
           command: |
@@ -330,7 +334,8 @@ jobs:
             cd ..
             # Zip the directory
             tar -C backend -czvf artifact.tar.gz  .
-            mv artifact.tar.gz  .circleci/ansible/roles/deploy/files/artifact.tar.gz
+            mkdir -p  ~/project/.circleci/ansible/roles/deploy/files
+            cp ./artifact.tar.gz  .circleci/ansible/roles/deploy/files
             cd .circleci/ansible
             ansible-playbook -i inventory.txt deploy-backend.yml
       
