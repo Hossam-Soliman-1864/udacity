@@ -324,7 +324,7 @@ jobs:
           name: Install dependencies
           command: |
             apk add --update ansible
-            apk add --update nodejs npm
+            apk add --update  npm
             apk add --update curl
             apk add --update tar  gzip
             apk add python curl
@@ -340,7 +340,7 @@ jobs:
             npm run build
             cd ..
             # Zip the directory
-            tar -C backend -czvf artifact.tar.gz  
+            tar -C backend -czvf artifact.tar.gz .  
             mkdir -p  .circleci/ansible/roles/deploy/files
             cp ./artifact.tar.gz  .circleci/ansible/roles/deploy/files
             cd .circleci/ansible
