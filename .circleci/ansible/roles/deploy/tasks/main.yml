@@ -1,25 +1,25 @@
 ---
 - name: Creates directory
   file:
-    path: ~/backend_app
+    path: ~/backend
     state: directory
 
 - name: Copy files
   copy:
     src: "artifact.tar.gz"
-    dest: "~/backend_app/artifact.tar.gz"
+    dest: "~/backend/artifact.tar.gz"
   
 
 - name: Extract 
   unarchive:
-    src: "~/backend_app/artifact.tar.gz"
-    dest: "~/backend_app/"
+    src: "~/backend/artifact.tar.gz"
+    dest: "~/backend/"
     remote_src: yes
 
 
 - name: "Install dependencies for project"
   shell: |
-    cd ~/backend_app
+    cd ~/backend
     npm install
 
 - name: "Executing node"
@@ -34,7 +34,7 @@
     msg: "{{ execute_node.stdout_lines }}"
 
   args:
-    chdir: ~/backend_app/backend/dist
+    chdir: ~/backend/dist
   environment:
     - ENVIRONMENT: production
     - TYPEORM_CONNECTION: "{{ lookup('env', 'TYPEORM_CONNECTION')}}"     
