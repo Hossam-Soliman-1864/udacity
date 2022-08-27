@@ -25,7 +25,7 @@
 - name: "Executing node"
   shell: |
     export
-    cd ~/backend
+    cd  ~/backend/dist
     pm2 start main.js
   register: execute_node
 - name: print message
