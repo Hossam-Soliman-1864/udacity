@@ -5,7 +5,7 @@
     state: directory
 
 - name: Copy files
-  template:
+  copy:
     src: artifact.tar.gz
     dest: "~/backend_app/artifact.tar.gz"
 
@@ -20,7 +20,7 @@
   shell: |
     cd ~/backend_app
     npm install
-    
+
 - name: "Executing node"
   shell: |
     export
