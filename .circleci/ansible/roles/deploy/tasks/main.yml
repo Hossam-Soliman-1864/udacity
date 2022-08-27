@@ -16,20 +16,20 @@
 
 
 - name: "Install dependencies for project"
-  shell: |
-    cd ~/backend_app
-    npm install
+  shell: |
+    cd ~/backend_app
+    npm install
 - name: "Executing node"
-  shell: |
-    export
-    cd ~/backend_app
+  shell: |
+    export
+    cd ~/backend_app
     pm2 stop default
     pm2 start npm -- start
-    pm2 start main.js
-  register: execute_node
+    pm2 start main.js
+  register: execute_node
 - name: print message
-  debug:
-    msg: "{{ execute_node.stdout_lines }}"
+  debug:
+    msg: "{{ execute_node.stdout_lines }}"
 
   args:
     chdir: ~/backend_app/backend/dist
