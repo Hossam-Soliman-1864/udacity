@@ -18,7 +18,7 @@ commands:
             
             aws cloudformation delete-stack --stack-name "udapeople-backend-<< parameters.workflow_id >>" 
   destroy-environment:
-    description: Destroy frontend cloudformation stacks given a workflow ID.
+    description: Destroy frontend cloudformation stacks given an workflow ID.
     parameters:
       workflow_id:
         type: string      
@@ -172,10 +172,6 @@ jobs:
             npm install
             npm audit --audit-level=critical  ||  true
 
-
-     # - save_cache:
-    #      paths: [backend/node_modules]
-    #      key: backend-build      
 
   deploy-infrastructure:
     docker:
