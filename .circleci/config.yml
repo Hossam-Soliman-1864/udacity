@@ -369,12 +369,9 @@ jobs:
       - run:
           name: Get backend url
           command: |
-            export BACKEND_IPP=$(aws ec2 describe-instances \
-              \
-                --query 'Reservations[*].Instances[*].PublicIpAddress' \
-                --output text)
-            export API_URLL="http://${BACKEND_IPP}:3030"
-            echo "${API_URLL}"
+            export BACKEND_IP=$(tail -1 .circleci/ansible/inventory.txt )
+            export API_URL="http://${BACKEND_IP}:3030"
+            echo "${API_URL}"
       - run:
           name: Backend smoke test.
           command: |
