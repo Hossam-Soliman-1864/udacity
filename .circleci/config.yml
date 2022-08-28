@@ -209,8 +209,9 @@ jobs:
               \
                 --query 'Reservations[*].Instances[*].PublicIpAddress' \
                 --filters "Name=tag:Project,Values=hossamudapeople" \
-                --output text >> inventory
+                --output text >> .circleci/ansible/inventory.txt
 
+             
       - persist_to_workspace:
           root: ~/
           paths:
