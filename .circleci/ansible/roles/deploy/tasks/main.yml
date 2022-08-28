@@ -24,7 +24,6 @@
 
 - name: "Executing node"
   command:
-    cd  ~/backend/dist
     pm2 start main.js
   register: execute_node
     
