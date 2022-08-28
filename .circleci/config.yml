@@ -50,9 +50,9 @@ commands:
                 # Logic for reverting the database state
                 if (( $SUCCESS == 1 ));
                 then
-                    cd ~/project/backend
-                    npm install
-                    npm run migration:revert
+                  cd ~/project/backend
+                  npm install
+                  npm run migration:revert
                 fi  
 
 jobs:
@@ -184,7 +184,7 @@ jobs:
           command: |
             aws cloudformation deploy \
               --template-file .circleci/files/backend.yml \
-              --tags project=hossamudapeople \
+              --tags project=udapeople \
               --stack-name  udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}  \
               --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"
           
@@ -193,7 +193,7 @@ jobs:
           command: |
             aws cloudformation deploy \
               --template-file .circleci/files/frontend.yml \
-              --tags project=hossamudapeople \
+              --tags project=udapeople \
               --stack-name  udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7} \
               --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"  
 
@@ -344,6 +344,8 @@ jobs:
             cd .circleci/ansible
             ansible-playbook -i inventory.txt deploy-backend.yml
       
+      - destroy-environment1:
+          workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"
      
       - revert-migrations:
           workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"    
@@ -371,10 +373,16 @@ jobs:
       - run:
           name: Backend smoke test.
           command: |
+            export BACKEND_IP=$(tail -1 .circleci/ansible/inventory.txt )
+            export API_URL="http://${BACKEND_IP}:3030"
+            echo "${API_URL}"
             if curl  "${API_URL}/api/status"  |  grep "ok"
             then
               return 0
+              echo ${API_URL}/api/status
             else
+              echo ${API_URL}/api/status
+              echo ${API_URL}
               return 1
             fi
       - run:
