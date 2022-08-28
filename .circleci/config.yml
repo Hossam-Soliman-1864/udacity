@@ -197,7 +197,7 @@ jobs:
           command: |
             aws cloudformation deploy \
               --template-file .circleci/files/frontend.yml \
-              --tags project=hossam-udapeople \
+              --tags project=hossamudapeople \
               --stack-name  udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7} \
               --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"  
              
@@ -206,7 +206,7 @@ jobs:
           command: |
             aws ec2 describe-instances \
               --query "Reservations[*].Instances[*].PublicIpAddress" \
-              --filters "Name=tag:project,Values= hossam-udapeople" \       
+              --filters "Name=tag:project,Values= hossamudapeople" \       
               --output=text  >>  .circleci/ansible/inventory.txt
               
           
@@ -289,7 +289,7 @@ jobs:
           command: |
             export BACKEND_IP=$(aws ec2 describe-instances \
             --query "Reservations[*].Instances[*].PublicIpAddress" \
-            --filters "Name=tag:project,Values=hossam-udapeople" \ 
+            --filters "Name=tag:project,Values= hossamudapeople" \ 
             --output=text)
             export API_URL="http://${BACKEND_IP}:3030"
             echo "${API_URL}"
@@ -369,7 +369,7 @@ jobs:
           command: |
             export BACKEND_IP=$(aws ec2 describe-instances \
             --query 'Reservations[*].Instances[*].PublicIpAddress' \
-            --filters "Name=tag:project,Values=hossam-udapeople" \ 
+            --filters "Name=tag:project,Values= hossam-udapeople" \ 
             --output text)
             export API_URL="http://${BACKEND_IP}:3030"
             echo "${API_URL}"
