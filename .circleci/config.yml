@@ -206,7 +206,7 @@ jobs:
           command: |
             aws ec2 describe-instances \
               --query "Reservations[*].Instances[*].PublicIpAddress" \
-              --filters "Name=tag:project,Values= hossamudapeople" \       
+              --filters "Name=tag:project , Values= hossamudapeople" \       
               --output=text  >>  .circleci/ansible/inventory.txt
               
           
