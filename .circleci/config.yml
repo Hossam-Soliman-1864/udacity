@@ -448,7 +448,7 @@ jobs:
     steps:
       - checkout
       - run:
-          name: run dependaicies
+          name: run dependaiciess
           command: |
             yum install -y tar gzip  
 
