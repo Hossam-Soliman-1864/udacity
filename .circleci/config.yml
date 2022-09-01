@@ -413,7 +413,7 @@ jobs:
     steps:
       - checkout 
       - run:
-          name: get old work flow
+          name: run dependaicies
           command: |
             yum install -y tar gzip
       - run:
@@ -449,6 +449,10 @@ jobs:
       - checkout
       - attach_workspace:
           at: ~/
+      - run:
+          name: run dependaicies
+          command: |
+            yum install -y tar gzip    
       - run:
           name: Get old stack workflow id
           command: |
