@@ -1,0 +1,3 @@
+﻿URL OF GIT REBO ::  https://github.com/Hossam-Soliman-1864/udacity
+PUBLIC URL OF S3 BUCKET:: http://udapeople-973cec3.s3-website-us-east-1.amazonaws.com/
+
